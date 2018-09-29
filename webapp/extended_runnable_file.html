@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta charset="UTF-8">
+
+		<title>SAPUI5Training</title>
+
+		<script id="sap-ui-bootstrap" src="../../resources/sap-ui-core.js" data-sap-ui-libs="sap.m" data-sap-ui-theme="sap_belize" data-sap-ui-compatversion="edge" data-sap-ui-resourceroots="{&quot;com.techedge.training.SAPUI5Training&quot;: &quot;./&quot;}">
+		</script>
+
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+
+		<script>
+			sap.ui.getCore().attachInit(function() {
+				new sap.m.Shell({
+					app: new sap.ui.core.ComponentContainer({
+						height : "100%",
+						name : "com.techedge.training.SAPUI5Training"
+					})
+				}).placeAt("content");
+			});
+		</script>
+	<style>.facadebtn{display:inline-block;width:60px;height:60px;background-color:#009de0;border-radius:50px;text-align:center;box-shadow: 2px 2px 3px #999;opacity:.3;}
+.facadebtn .sapUiIcon{color:#FFF;font-size:1.5rem;cursor:pointer;line-height:60px;width:60px;}
+.facadebtn:hover{opacity:1;}
+#interactive.viewport video{width:320px;height:240px;}
+.facade .sapMSLITitleOnly, .facade .sapMILILabel {font-size: 1rem;}
+#interactive.viewport .drawingBuffer{width:320px;height:240px;position:absolute;}
+</style>
+<script type="text/javascript">
+
+window._facadeSettings = {"cordova-plugin-device-orientation":false,"accelerometer":{},"compass":{}};
+	window.sIdeOrigin = "https://webidecp-p1941733196trial.dispatcher.hanatrial.ondemand.com";
+	window.sap_webide_FacadePreview = true;
+	window.sFacadePath = "https://webidecp-p1941733196trial.dispatcher.hanatrial.ondemand.com/hatdi_uf2d18766/hybrid/cordovafacade/cordova.js";
+	window.sFacadeCfgViewPath = "https://webidecp-p1941733196trial.dispatcher.hanatrial.ondemand.com/hatdi_uf2d18766/hybrid/view/";
+	window.bridgeHtml = "https://webidecp-p1941733196trial.dispatcher.hanatrial.ondemand.com/hatdi_uf2d18766/hybrid/cordovafacade/MessageBridge.html";
+	window.msgDefPath = "https://webidecp-p1941733196trial.dispatcher.hanatrial.ondemand.com/hatdi_uf2d18766/hybrid/mobileextend/MessageDef.js";
+	window.msgBridgePath = "https://webidecp-p1941733196trial.dispatcher.hanatrial.ondemand.com/hatdi_uf2d18766/hybrid/mobileextend/MessageBridge.js";
+	window.meCssPath = "https://webidecp-p1941733196trial.dispatcher.hanatrial.ondemand.com/hatdi_uf2d18766/hybrid/css/mobileExtend.css";
+</script>
+<script src="https://webidecp-p1941733196trial.dispatcher.hanatrial.ondemand.com/hatdi_uf2d18766/hybrid/cordovafacade/floatingButton.js" type="text/javascript"></script>
+</head>
+
+	<body class="sapUiBody" id="content">
+	</body>
+
+</html>
