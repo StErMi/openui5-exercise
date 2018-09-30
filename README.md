@@ -56,6 +56,32 @@ Follow the help video: [Create a new SAPUI5 app on SAP WebIDE Full-Stack](https:
 Now we need to create a Destination from our SAP SCP account to our OData Service.
 Follow the help video: [Configure OData Service on your SAPUI5 Application](https://www.youtube.com/watch?v=-SXlugW-QNc)
 
-## Step 1
+##  Step 1
 
-We're ready to follow the instructions inside the [Step 1](https://github.com/StErMi/openui5-exercise/tree/step_1) of our exercise.
+### Recap from previus Step
+We've created our SAPUI5 application on SAP WebIDE and we have configured our app to use the ES5 Gateway Destination created on SAP SCP Cockpit.
+
+### What will be covered on this exercise
+
+ - What is a XML Metadata Manifest and what's inside it
+ - Use a `sap.m.Table` with items and property binding
+ - Use `sap.ui.model.type.DateTime` to format JavaScript Date
+ - How to style columns to act differently on mobile/table/desktop devices
+
+Now it's time to get our hands dirty with some code. In this step you are going to display a table of Business Partner with some useful inforations.
+
+The first thing to do is to checkout our service metadata. Each oData service expose a special XML file called XML Metadata Manifest. You can see it by appending `$metadata` to the service url. This is our [GWSAMPLE_BASIC metadata URL](https://sapes5.sapdevcenter.com/sap/opu/odata/iwbep/GWSAMPLE_BASIC/$metadata).
+The Metatada Manifest is really important because it describes:
+
+ - Which Model Set exposed by the service
+ - For each Model which is the primary key, the list of attributes (with type and constraints) and if it has some navigation property (how you can navigate from this model to others as relations)
+ - A lot of other useful informations 
+
+Take a look at the `BusinessPartner EntitySet`, and try to guess which property I've used for the final result of this step.  Now checkout the Table documentation on SAPUI5 and try to replicate my layout with the correct order of columns and items. For each column name create a translation in the `i18n.property` files and use it in the XML as a binding.
+Now, attach the BusinessPartnerSet to the table, add the requested column and style the column values according to the example. 
+
+Please note that:
+ - Created At has a specific DateTime formated displayed
+ - Column act differently if the app is opened in a phone, tablet or desktop browser
+
+After you have finished the exercise you can check out the result.
