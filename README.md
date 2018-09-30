@@ -1,3 +1,4 @@
+
 # OpenUI5 Training
 This repo will contains a step-by-step training course that I've created for new OpenUI5 developers that are joining our [Techedge Group](http://www.techedgegroup.com) office in Lucca (Italy).
 
@@ -48,11 +49,13 @@ I've already preparated the configuration for (lazy one!) so you can just click 
 
 Ok it's time to develop. Now I will show you how you can create a WebIDE project. We're in an advanced exercise so I hope you already know how to do it but maybe it could be useful also for newcomers ;)
 
-<< Insert Video >>
+Follow the help video: [Create a new SAPUI5 app on SAP WebIDE Full-Stack](https://www.youtube.com/watch?v=ymopVPlTTuw)
 
 ### Configure the OData service with the ES5 Destination
 
-<< Insert Video >>
+Now we need to create a Destination from our SAP SCP account to our OData Service.
+Follow the help video: [Configure OData Service on your SAPUI5 Application](https://www.youtube.com/watch?v=-SXlugW-QNc)
 
-##  Step 1
-Ok we're ready, now I will show you what you have to do on Step 1
+## Step 1
+
+We're ready to follow the instructions inside the [Step 1](https://github.com/StErMi/openui5-exercise/tree/step_1) of our exercise.
