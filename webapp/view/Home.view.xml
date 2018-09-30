@@ -3,7 +3,76 @@
 	<App id="idAppControl">
 		<pages>
 			<Page title="{i18n>title}">
-				<content></content>
+				<content>
+					<Table id="idProductsTable"
+						sticky="ColumnHeaders"
+						growing="true"
+						growingScrollToLoad="true"
+						inset="false"
+						items="{
+							path: '/BusinessPartnerSet',
+							sorter: {
+								path: 'CompanyName'
+							}
+						}">
+						<columns>
+							<Column>
+								<Text text="{i18n>businessPartner}" />
+							</Column>
+							<Column 
+								minScreenWidth="Tablet"
+								demandPopin="true">
+								<Text text="{i18n>address}" />
+							</Column>
+							<Column
+								minScreenWidth="Desktop">
+								<Text text="{i18n>webAddress}" />
+							</Column>
+							<Column
+								minScreenWidth="Desktop">
+								<Text text="{i18n>emailAddress}" />
+							</Column>
+							<Column
+								minScreenWidth="Desktop">
+								<Text text="{i18n>phoneNumber}" />
+							</Column>
+							<Column
+								minScreenWidth="Desktop">
+								<Text text="{i18n>createdAt}" />
+							</Column>
+						</columns>
+						<items>
+							<ColumnListItem>
+								
+								<cells>
+									<ObjectIdentifier
+										title="{CompanyName}"
+										text="{BusinessPartnerID}"/>
+									<ObjectIdentifier
+										title="{Address/Street} {Address/City}"
+										text="{Address/PostalCode} {Address/Country}"/>
+									<Link
+										href="{WebAddress}"
+										text="{WebAddress}" />
+									<Link
+										href="mailto:{EmailAddress}"
+										text="{EmailAddress}" />
+									<Link
+										href="tel:{PhoneNumber}"
+										text="{PhoneNumber}" />
+									<Text
+										text="{
+											path: 'CreatedAt',
+											type: 'sap.ui.model.type.DateTime',
+											formatOptions: {
+												style: 'medium'
+											}
+										}" />
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</content>
 			</Page>
 		</pages>
 	</App>
