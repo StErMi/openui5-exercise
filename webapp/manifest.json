@@ -39,10 +39,7 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": [
-			"sap_hcb",
-			"sap_belize"
-		]
+		"supportedThemes": ["sap_hcb", "sap_belize"]
 	},
 	"sap.ui5": {
 		"rootView": {
@@ -78,14 +75,24 @@
 				},
 				"dataSource": "GWSAMPLE_BASIC",
 				"preload": true
+			},
+			"filters": {
+				"type": "sap.ui.model.json.JSONModel",
+				"settings": {},
+				"uri": "model/filters.json",
+				"preload": false
+			},
+			"data": {
+				"type": "sap.ui.model.json.JSONModel",
+				"settings": {},
+				"uri": "model/data.json",
+				"preload": false
 			}
 		},
 		"resources": {
-			"css": [
-				{
-					"uri": "css/style.css"
-				}
-			]
+			"css": [{
+				"uri": "css/style.css"
+			}]
 		},
 		"routing": {
 			"config": {
@@ -97,15 +104,11 @@
 				"controlId": "idAppControl",
 				"clearControlAggregation": false
 			},
-			"routes": [
-				{
-					"name": "RouteHome",
-					"pattern": "RouteHome",
-					"target": [
-						"TargetHome"
-					]
-				}
-			],
+			"routes": [{
+				"name": "TargetHome",
+				"pattern": "RouteHome",
+				"target": ["TargetHome"]
+			}],
 			"targets": {
 				"TargetHome": {
 					"viewType": "XML",

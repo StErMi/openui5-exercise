@@ -1,0 +1,18 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<ViewSettingsDialog
+		title="{i18n>viewSettingDialogBusinessPartner}"
+		confirm="handleViewSettingsDialogButtonConfirm">
+		<sortItems>
+			<ViewSettingsItem text="{i18n>businessPartnerId}" key="BusinessPartnerID" />
+			<ViewSettingsItem text="{i18n>businessPartnerName}" key="CompanyName" selected="true"  />
+			<ViewSettingsItem text="{i18n>businessPartnerCountry}" key="Address/Country" />
+			<ViewSettingsItem text="{i18n>businessPartnerCreatedAt}" key="CreatedAt" />
+		</sortItems>
+		<groupItems>
+			<ViewSettingsItem text="{i18n>businessPartnerCountry}" key="Address/Country" />
+			<ViewSettingsItem text="{i18n>businessPartnerCreatedAt}" key="CreatedAt" />
+		</groupItems>
+	</ViewSettingsDialog>
+</core:FragmentDefinition>

@@ -1,20 +1,70 @@
 <mvc:View controllerName="com.techedge.training.SAPUI5Training.controller.Home" xmlns:html="http://www.w3.org/1999/xhtml"
-	xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m">
+	xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" displayBlock="true" xmlns="sap.m" xmlns:fb="sap.ui.comp.filterbar">
 	<App id="idAppControl">
 		<pages>
 			<Page title="{i18n>title}">
 				<content>
-					<Table id="idProductsTable"
+					<fb:FilterBar clear="onClear" search="onSearch" showClearButton="true" showClearOnFB="true">
+						
+						<fb:filterGroupItems>
+							<fb:FilterGroupItem visibleInFilterBar="true" groupName="Partner" groupTitle="{i18n>filterPartnerInfo}" name="PartnerID" label="{i18n>filterPartnerID}">
+								<fb:control>
+									<Input value="{filters>/id}" />
+								</fb:control>				
+							</fb:FilterGroupItem>
+							
+							<fb:FilterGroupItem visibleInFilterBar="true" groupName="Partner" groupTitle="{i18n>filterPartnerInfo}" name="PartnerName" label="{i18n>filterPartnerName}">
+								<fb:control>
+									<Input value="{filters>/name}" />
+								</fb:control>				
+							</fb:FilterGroupItem>				
+							
+							<fb:FilterGroupItem visibleInFilterBar="true" groupName="PartnerAddress" groupTitle="{i18n>filterPartnerAddress}" name="PartnerStreet" label="{i18n>filterPartnerStreet}">
+								<fb:control>
+									<Input value="{filters>/street}" />
+								</fb:control>				
+							</fb:FilterGroupItem>			
+							
+							<fb:FilterGroupItem visibleInFilterBar="true" groupName="PartnerAddress" groupTitle="{i18n>filterPartnerAddress}" name="PartnerCountry" label="{i18n>filterPartnerCountry}">
+								<fb:control>
+									<Select
+										forceSelection="false"
+										selectedKey="{filters>/country}"
+										showSecondaryValues="true"
+										items="{
+											path: 'data>/countries',
+											sorter: { path: 'name' }
+										}">
+										<core:ListItem key="{data>code}" text="{data>name}" additionalText="{data>code}" />
+									</Select>
+								</fb:control>				
+							</fb:FilterGroupItem>
+							
+						</fb:filterGroupItems>			
+	    			</fb:FilterBar>	
+					<Table id="idPartnerTable"
 						sticky="ColumnHeaders"
 						growing="true"
 						growingScrollToLoad="true"
 						inset="false"
+						updateFinished="onUpdateFinished"
 						items="{
 							path: '/BusinessPartnerSet',
 							sorter: {
 								path: 'CompanyName'
 							}
 						}">
+						<headerToolbar>
+							<Toolbar>
+								<ToolbarSpacer/>
+								<Button tooltip="{i18n>viewSettingsDialog}" icon="sap-icon://drop-down-list" press="handleViewSettingsDialogButtonOpen" />
+							</Toolbar>
+						</headerToolbar>
+						<infoToolbar>
+							<Toolbar visible="{data>/toolbar/visible}">
+								<Label text="{i18n>searchTimestamp}: {path: 'data>/toolbar/timestamp', type: 'sap.ui.model.type.DateTime', formatOptions: { style: 'medium' }} | {i18n>searchCount}: {data>/toolbar/count}" />
+							</Toolbar>
+						</infoToolbar>
 						<columns>
 							<Column>
 								<Text text="{i18n>businessPartner}" />

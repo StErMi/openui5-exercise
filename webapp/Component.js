@@ -25,6 +25,8 @@ sap.ui.define([
 
 			// set the device model
 			this.setModel(models.createDeviceModel(), "device");
+			
+			this.getModel("data").setSizeLimit(9999);
 		}
 	});
 });
