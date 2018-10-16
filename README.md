@@ -208,8 +208,7 @@ So:
 2.  Remember to destroy the dialog when needed like when the dialog closes if you’re using the same variable for different fragments or on the exit event of the controller
 
 #### Info Toolbar
-
-The Info Toolbar is a UI control that is handled by the Table and usually is displayed below the Table’s header. It’s very useful when you want to show some pieces of information that need to be highlighted.
+The InfoToolbar is a [Toolbar](https://sapui5.hana.ondemand.com/#/api/sap.m.Toolbar) that is handled by the ListBase (class that is extended by the Table) and usually is displayed below the header (it’s inside the infoToolbar aggregation). It’s very useful when you want to show some pieces of information that need to be highlighted.
 
 In our case, when the user performs a search we’re going to display the latest timestamp of the search and how many records have been filtered in total.
 
