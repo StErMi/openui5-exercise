@@ -3,16 +3,19 @@ sap.ui.define([
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
 	"sap/ui/model/Sorter",
-	"sap/ui/core/format/DateFormat"
-], function (Controller, Filter, FilterOperator, Sorter, DateFormat) {
+	"sap/ui/core/format/DateFormat",
+	"sap/ui/Device",
+    "com/techedge/training/SAPUI5Training/model/Formatter"
+], function (Controller, Filter, FilterOperator, Sorter, DateFormat, Device, Formatter) {
 	"use strict";
 
-	return Controller.extend("com.techedge.training.SAPUI5Training.controller.Home", {
+	return Controller.extend("com.techedge.training.SAPUI5Training.controller.BusinessPartnerDetail", {
 		
 		/////////////////////////////////////////////////////////
 		// VARIABLES
 		/////////////////////////////////////////////////////////
 		
+		formatter: Formatter,
 		_oDialog: null,
 		_dateFormat: DateFormat.getDateInstance({pattern : "dd/MM/YYYY hh:mm" }),
 		
@@ -21,6 +24,9 @@ sap.ui.define([
 		/////////////////////////////////////////////////////////
 		
 		onInit: function () {
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.getRoute("TargetBusinessPartnerDetail").attachMatched(this.__onRouteMatched, this);
+			
 			var oController = this;
 			this.mGroupFunctions = {
 				CreatedAt: function(oContext) {
@@ -33,11 +39,23 @@ sap.ui.define([
 				}
 			};
 		},
+		
+		__onRouteMatched: function(oEvent) {
+			var that = this;
+			this.getView().bindElement({
+				path: "/BusinessPartnerSet('" + oEvent.getParameter("arguments").BusinessPartnerID + "')",
+				events : {
+					dataRequested: function () {
+						that.getView().setBusy(true);
+					},
+					dataReceived: function () {
+						that.getView().setBusy(false);
+					}
+				}
+			});
+		},
 
 		onExit : function () {
-			if (this._oDialog) {
-				this._oDialog.destroy();
-			}
 		},
 		
 		/////////////////////////////////////////////////////////
@@ -46,7 +64,7 @@ sap.ui.define([
 		
 		handleViewSettingsDialogButtonOpen: function(oEvent) {
 			if (!this._oDialog) {
-				this._oDialog = sap.ui.xmlfragment("com.techedge.training.SAPUI5Training.view.fragment.dialog.PartnerViewSettingDialog", this);
+				this._oDialog = sap.ui.xmlfragment("com.techedge.training.SAPUI5Training.view.fragment.dialog.SaleOrderViewSettingDialog", this);
 				this.getView().addDependent(this._oDialog);
 			}
 			// toggle compact style
@@ -55,7 +73,7 @@ sap.ui.define([
 		},
 		
 		handleViewSettingsDialogButtonConfirm: function(oEvent) {
-			var oTable = this.byId("idPartnerTable");
+			var oTable = this.byId("tableSalesOrder");
 
 			var mParams = oEvent.getParameters();
 			var oBinding = oTable.getBinding("items");
@@ -72,7 +90,7 @@ sap.ui.define([
 				sPath = mParams.groupItem.getKey();
 				bDescending = mParams.groupDescending;
 				vGroup = this.mGroupFunctions[sPath];
-				aSorters.push(new Sorter(sPath, bDescending, vGroup === null ? true : vGroup));
+				aSorters.push(new Sorter(sPath, bDescending, vGroup === undefined ? true : vGroup));
 			}
 			
 			// Gather sorting info
@@ -86,42 +104,32 @@ sap.ui.define([
 		// FILTERBAR EVENTS
 		/////////////////////////////////////////////////////////
 		
-		onUpdateFinished: function(oEvent) {
-			var sReason = oEvent.getParameter("reason");
-			if( sReason === "Filter" ) {
-				var oDataModel = this.getView().getModel("data");
-				oDataModel.setProperty("/toolbar/visible", true);
-				oDataModel.setProperty("/toolbar/timestamp", new Date());
-				oDataModel.setProperty("/toolbar/count", oEvent.getSource().getBinding("items").getLength());
-			}
-		},
-		
 		onSearch: function(oEvent) {
 			var oFilterModel = this.getView().getModel("filters");
 			
-			var sID = oFilterModel.getProperty("/id");
-			var sName = oFilterModel.getProperty("/name");
-			var sStreet = oFilterModel.getProperty("/street");
-			var sCountry = oFilterModel.getProperty("/country");
+			var sOrderId = oFilterModel.getProperty("/orderId");
+			var sLifecycleStatus = oFilterModel.getProperty("/lifecycleStatus");
+			var sBillingStatus = oFilterModel.getProperty("/billingStatus");
+			var sDeliveryStatus = oFilterModel.getProperty("/deliveryStatus");
 			var aFilters = [];
 			
-			if( sID ) {
-				aFilters.push( new Filter("BusinessPartnerID", FilterOperator.Contains, sID) );
+			if( sOrderId ) {
+				aFilters.push( new Filter("SalesOrderID", FilterOperator.Contains, sOrderId) );
 			}
 			
-			if( sName ) {
-				aFilters.push( new Filter("CompanyName", FilterOperator.Contains, sName) );
+			if( sLifecycleStatus ) {
+				aFilters.push( new Filter("LifecycleStatus", FilterOperator.EQ, sLifecycleStatus) );
 			}
 			
-			if( sStreet ) {
-				aFilters.push( new Filter("Address/Street", FilterOperator.Contains, sStreet) );
+			if( sBillingStatus ) {
+				aFilters.push( new Filter("BillingStatus", FilterOperator.EQ, sBillingStatus) );
 			}
 			
-			if( sCountry ) {
-				aFilters.push( new Filter("Address/Country", FilterOperator.EQ, sCountry) );
+			if( sDeliveryStatus ) {
+				aFilters.push( new Filter("DeliveryStatus", FilterOperator.EQ, sDeliveryStatus) );
 			}
 			
-			this.byId("idPartnerTable").getBinding("items").filter(aFilters);
+			this.byId("tableSalesOrder").getBinding("items").filter(aFilters);
 		},
 		
 		onClear: function(oEvent) {
@@ -129,6 +137,6 @@ sap.ui.define([
 			oFilterModel.setProperty("/", {});
 			this.onSearch(null);
 		}
-
+		
 	});
 });

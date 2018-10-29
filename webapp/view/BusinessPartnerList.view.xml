@@ -1,0 +1,35 @@
+<mvc:View controllerName="com.techedge.training.SAPUI5Training.controller.BusinessPartnerList" xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" displayBlock="true" xmlns="sap.m" xmlns:fb="sap.ui.comp.filterbar">
+		<Page title="{i18n>businessPartnerListPageTitle} ({data>/businessPartnerList/count})">
+			<subHeader>
+				<Toolbar>
+					<SearchField
+						search="onSearch"
+						width="100%" />
+				</Toolbar>
+			</subHeader>
+			<content>
+				<List id="idPartnerList"
+					growing="true"
+					growingScrollToLoad="true"
+					inset="false"
+					updateFinished="onUpdateFinished"
+					itemPress="onItemPress"
+					items="{
+						path: '/BusinessPartnerSet',
+						sorter: {
+							path: 'CompanyName'
+						}
+					}">
+					<items>
+						<StandardListItem
+							type="Navigation"
+							description="{BusinessPartnerID}"
+							title="{CompanyName}"
+							info="{Address/City} ({Address/Country})"
+						/>
+					</items>
+				</List>
+			</content>
+		</Page>
+</mvc:View>

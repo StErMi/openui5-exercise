@@ -1,0 +1,24 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<ViewSettingsDialog
+		title="{i18n>viewSettingDialogBusinessPartner}"
+		confirm="handleViewSettingsDialogButtonConfirm">
+		<sortItems>
+			<ViewSettingsItem text="{i18n>salesOrderID}" key="SalesOrderID" selected="true" />
+			<ViewSettingsItem text="{i18n>lifecycleStatusDescription}" key="LifecycleStatus" />
+			<ViewSettingsItem text="{i18n>billingStatusDescription}" key="BillingStatus" />
+			<ViewSettingsItem text="{i18n>delivertStatusDescription}" key="DeliveryStatus" />
+			<ViewSettingsItem text="{i18n>grossAmount}" key="GrossAmount" />
+			<ViewSettingsItem text="{i18n>netAmount}" key="NetAmount" />
+			<ViewSettingsItem text="{i18n>taxAmount}" key="TaxAmount" />
+			<ViewSettingsItem text="{i18n>businessPartnerCreatedAt}" key="CreatedAt" />
+		</sortItems>
+		<groupItems>
+			<ViewSettingsItem text="{i18n>lifecycleStatusDescription}" key="LifecycleStatus" />
+			<ViewSettingsItem text="{i18n>billingStatusDescription}" key="BillingStatus" />
+			<ViewSettingsItem text="{i18n>delivertStatusDescription}" key="DeliveryStatus" />
+			<ViewSettingsItem text="{i18n>businessPartnerCreatedAt}" key="CreatedAt" />
+		</groupItems>
+	</ViewSettingsDialog>
+</core:FragmentDefinition>

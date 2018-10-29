@@ -43,7 +43,7 @@
 	},
 	"sap.ui5": {
 		"rootView": {
-			"viewName": "com.techedge.training.SAPUI5Training.view.Home",
+			"viewName": "com.techedge.training.SAPUI5Training.view.App",
 			"type": "XML"
 		},
 		"dependencies": {
@@ -70,7 +70,7 @@
 				"type": "sap.ui.model.odata.v2.ODataModel",
 				"settings": {
 					"defaultOperationMode": "Server",
-					"defaultBindingMode": "OneWay",
+					"defaultBindingMode": "TwoWay",
 					"defaultCountMode": "Request"
 				},
 				"dataSource": "GWSAMPLE_BASIC",
@@ -100,21 +100,32 @@
 				"viewType": "XML",
 				"async": true,
 				"viewPath": "com.techedge.training.SAPUI5Training.view",
-				"controlAggregation": "pages",
-				"controlId": "idAppControl",
+				"controlId": "rootControl",
 				"clearControlAggregation": false
 			},
 			"routes": [{
-				"name": "TargetHome",
-				"pattern": "RouteHome",
-				"target": ["TargetHome"]
+				"name": "TargetBusinessPartnerList",
+				"pattern": "",
+				"target": ["TargeteBusinessPartnerList"]
+			}, {
+				"name": "TargetBusinessPartnerDetail",
+				"pattern": "partner/:BusinessPartnerID:",
+				"target": ["TargeteBusinessPartnerList", "TargetBusinessPartnerDetail"]
 			}],
 			"targets": {
-				"TargetHome": {
+				"TargeteBusinessPartnerList": {
 					"viewType": "XML",
+					"controlAggregation": "masterPages",
 					"transition": "slide",
 					"clearControlAggregation": false,
-					"viewName": "Home"
+					"viewName": "BusinessPartnerList"
+				}, 
+				"TargetBusinessPartnerDetail": {
+					"viewType": "XML",
+					"controlAggregation": "detailPages",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewName": "BusinessPartnerDetail"
 				}
 			}
 		}

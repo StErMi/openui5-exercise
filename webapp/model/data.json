@@ -1,4 +1,10 @@
 {
+  "businessPartnerList": {
+  	"count": 0
+  },
+  "saleOrderList": {
+  	"count": 0
+  },
   "toolbar": {
   	"visible": false,
   	"count": null,

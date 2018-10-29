@@ -1,0 +1,210 @@
+<mvc:View 
+	controllerName="com.techedge.training.SAPUI5Training.controller.BusinessPartnerDetail" 
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:fb="sap.ui.comp.filterbar"
+	xmlns:core="sap.ui.core"
+	xmlns:semantic="sap.m.semantic"
+	displayBlock="true">
+	<Page id="detail" title="{CompanyName}" class="sapUiStdPage">
+		<ObjectHeader 
+			responsive="true"
+			intro="{Address/Street}, {Address/City}, {Address/PostalCode} ({Address/Country})"
+			title="{CompanyName}"
+		>
+			<attributes>
+				<ObjectAttribute
+					title="{i18n>webAddress}"
+					text="{WebAddress}" />
+				<ObjectAttribute
+					title="{i18n>emailAddress}"
+					text="{EmailAddress}" />
+				<ObjectAttribute
+					title="{i18n>phoneNumber}"
+					text="{PhoneNumber}" />
+			</attributes>
+			<statuses>
+				<ObjectStatus
+					title="{i18n>createdAt}"
+					text="{
+							path: 'CreatedAt',
+								type: 'sap.ui.model.type.DateTime',
+								formatOptions: { style: 'medium' }
+					}"
+				/>
+			</statuses>
+		</ObjectHeader>
+		
+		<fb:FilterBar clear="onClear" search="onSearch" showClearButton="true" showClearOnFB="true">
+			<fb:filterGroupItems>
+				<fb:FilterGroupItem visibleInFilterBar="true" groupName="OrderInfo" groupTitle="{i18n>filterOrderInfo}" name="OrderID" label="{i18n>salesOrderID}">
+					<fb:control>
+						<Input value="{filters>/orderId}" />
+					</fb:control>				
+				</fb:FilterGroupItem>
+				
+				<fb:FilterGroupItem visibleInFilterBar="true" groupName="OrderStatus" groupTitle="{i18n>filterOrderStatus}" name="OrderLifecycleStatus" label="{i18n>filterOrderLifecycleStatus}">
+					<fb:control>
+						<Select
+							forceSelection="false"
+							selectedKey="{filters>/lifecycleStatus}">
+							<core:ListItem key="C" text="{i18n>statusClosed}"  />
+							<core:ListItem key="X" text="{i18n>statusCancelled}"  />
+							<core:ListItem key="P" text="{i18n>statusProgress}"  />
+							<core:ListItem key="N" text="{i18n>statusNew}"  />
+						</Select>
+					</fb:control>				
+				</fb:FilterGroupItem>
+				
+				<fb:FilterGroupItem visibleInFilterBar="true" groupName="OrderStatus" groupTitle="{i18n>filterOrderStatus}" name="OrderBillingStatus" label="{i18n>filterOrderBillingStatus}">
+					<fb:control>
+						<Select
+							forceSelection="false"
+							selectedKey="{filters>/billingStatus}">
+							<core:ListItem key="P" text="{i18n>statusPaid}"  />
+							<core:ListItem key="" text="{i18n>statusInitial}"  />
+						</Select>
+					</fb:control>				
+				</fb:FilterGroupItem>	
+				
+				<fb:FilterGroupItem visibleInFilterBar="true" groupName="OrderStatus" groupTitle="{i18n>filterOrderStatus}" name="OrderDeliveryStatus" label="{i18n>filterOrderDeliveryStatus}">
+					<fb:control>
+						<Select
+							forceSelection="false"
+							selectedKey="{filters>/deliveryStatus}">
+							<core:ListItem key="D" text="{i18n>statusDelivered}"  />
+							<core:ListItem key="" text="{i18n>statusInitial}"  />
+						</Select>
+					</fb:control>				
+				</fb:FilterGroupItem>			
+				
+			</fb:filterGroupItems>			
+		</fb:FilterBar>
+		
+		<Table
+			id="tableSalesOrder"
+			width="auto"
+			items="{
+				path: 'ToSalesOrders',
+				sorter: {
+					path: 'CreatedAt',
+					descending: true
+				}
+			}"
+			growing="true"
+			growingScrollToLoad="true">
+			<headerToolbar>
+				<Toolbar>
+					<content>
+						<Title text="{i18n>saleOrders}" level="H2"/>
+						<ToolbarSpacer />
+						<Button tooltip="{i18n>viewSettingsDialog}" icon="sap-icon://drop-down-list" press="handleViewSettingsDialogButtonOpen" />
+					</content>
+				</Toolbar>
+			</headerToolbar>
+			<columns >
+				<Column>
+					<Text text="{i18n>salesOrderID}" />
+				</Column>
+				<Column
+					demandPopin="true"
+					minScreenWidth="Tablet">
+					<Text text="{i18n>lifecycleStatus}" />
+				</Column>
+				<Column
+					demandPopin="true"
+					minScreenWidth="Desktop">
+					<Text text="{i18n>billingStatus}" />
+				</Column>
+				<Column
+					demandPopin="true"
+					minScreenWidth="Desktop">
+					<Text text="{i18n>delivertStatus}" />
+				</Column>
+				<Column
+					demandPopin="true"
+					minScreenWidth="Tablet">
+					<Text text="{i18n>grossAmount}" />
+				</Column>
+				<Column
+					demandPopin="true"
+					minScreenWidth="Desktop">
+					<Text text="{i18n>netAmount}" />
+				</Column>
+				<Column
+					demandPopin="true"
+					minScreenWidth="Desktop">
+					<Text text="{i18n>taxAmount}" />
+				</Column>
+				<Column
+					demandPopin="true"
+					minScreenWidth="Tablet">
+					<Text text="{i18n>createdAt}" />
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem>
+					<cells>
+						<ObjectIdentifier
+							title="{SalesOrderID}"
+							text="{Note}"/>
+						
+						<ObjectStatus
+							text="{LifecycleStatusDescription}"
+							state="{ 
+								path: 'LifecycleStatus',
+								formatter: '.formatter.getLifeCycleStatus' 
+							}" />
+						
+						<ObjectStatus
+							text="{BillingStatusDescription}" 
+							state="{ 
+								path: 'BillingStatus',
+								formatter: '.formatter.getBillingStatus' 
+							}" />
+						
+						<ObjectStatus
+							text="{DeliveryStatusDescription}" 
+							state="{ 
+								path: 'DeliveryStatus',
+								formatter: '.formatter.getDeliveryStatus' 
+							}" />
+							
+						<ObjectNumber
+							number="{
+								parts:[{path:'GrossAmount'}, {path:'CurrencyCode'}],
+								type: 'sap.ui.model.type.Currency',
+								formatOptions: {showMeasure: false}
+							}"
+							unit="{CurrencyCode}" />
+							
+						<ObjectNumber
+							number="{
+								parts:[{path:'NetAmount'}, {path:'CurrencyCode'}],
+								type: 'sap.ui.model.type.Currency',
+								formatOptions: {showMeasure: false}
+							}"
+							unit="{CurrencyCode}" />
+							
+						<ObjectNumber
+							number="{
+								parts:[{path:'TaxAmount'}, {path:'CurrencyCode'}],
+								type: 'sap.ui.model.type.Currency',
+								formatOptions: {showMeasure: false}
+							}"
+							unit="{CurrencyCode}" />
+						
+						<Text
+							text="{
+								path: 'CreatedAt',
+								type: 'sap.ui.model.type.DateTime',
+								formatOptions: {
+									style: 'medium'
+								}
+							}" />
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+	</Page>
+</mvc:View>
