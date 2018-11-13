@@ -111,6 +111,10 @@
 				"name": "TargetBusinessPartnerDetail",
 				"pattern": "partner/:BusinessPartnerID:",
 				"target": ["TargeteBusinessPartnerList", "TargetBusinessPartnerDetail"]
+			}, {
+				"name": "TargetBusinessPartnerSalesOrderDetail",
+				"pattern": "partner/:BusinessPartnerID:/sale/:SalesOrderID:",
+				"target": ["TargeteBusinessPartnerList", "TargetBusinessPartnerSalesOrderDetail"]
 			}],
 			"targets": {
 				"TargeteBusinessPartnerList": {
@@ -126,6 +130,13 @@
 					"transition": "slide",
 					"clearControlAggregation": false,
 					"viewName": "BusinessPartnerDetail"
+				}, 
+				"TargetBusinessPartnerSalesOrderDetail": {
+					"viewType": "XML",
+					"controlAggregation": "detailPages",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewName": "BusinessPartnerSalesOrderDetail"
 				}
 			}
 		}

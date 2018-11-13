@@ -5,6 +5,9 @@
   "saleOrderList": {
   	"count": 0
   },
+  "saleOrderItemList": {
+  	"count": 0
+  },
   "toolbar": {
   	"visible": false,
   	"count": null,

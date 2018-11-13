@@ -1,0 +1,174 @@
+<mvc:View 
+	controllerName="com.techedge.training.SAPUI5Training.controller.BusinessPartnerSalesOrderDetail" 
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:fb="sap.ui.comp.filterbar"
+	xmlns:core="sap.ui.core"
+	xmlns:semantic="sap.m.semantic"
+	displayBlock="true">
+	<Page id="detail" title="{CompanyName}" class="sapUiStdPage" showNavButton="true" navButtonPress="onNavButtonPress">
+		<ObjectHeader 
+			responsive="true"
+			intro="{CustomerName}"
+			title="({SalesOrderID}) {Note}"
+			number="{
+				parts:[{path:'GrossAmount'},{path:'CurrencyCode'}],
+				type: 'sap.ui.model.type.Currency',
+				formatOptions: {showMeasure: false}
+			}"
+			numberUnit="{CurrencyCode}"
+		>
+			<attributes>
+				<ObjectAttribute
+					title="{i18n>netAmount}"
+					text="{
+						parts:[{path:'NetAmount'}, {path:'CurrencyCode'}],
+						type: 'sap.ui.model.type.Currency',
+						formatOptions: {showMeasure: true}
+					}"
+				/>
+				<ObjectAttribute
+					title="{i18n>taxAmount}"
+					text="{
+						parts:[{path:'TaxAmount'}, {path:'CurrencyCode'}],
+						type: 'sap.ui.model.type.Currency',
+						formatOptions: {showMeasure: true}
+					}"
+				/>
+				<ObjectAttribute
+					title="{i18n>createdAt}"
+					text="{
+						path: 'CreatedAt',
+						type: 'sap.ui.model.type.DateTime',
+						formatOptions: { style: 'medium' }
+					}"
+				/>
+			</attributes>
+			<statuses>
+				<ObjectStatus
+					title="{i18n>lifecycleStatus}"
+					text="{LifecycleStatusDescription}"
+					state="{ 
+						path: 'LifecycleStatus',
+						formatter: '.formatter.getLifeCycleStatus' 
+					}"
+				/>
+				<ObjectStatus
+					title="{i18n>billingStatus}"
+					text="{BillingStatusDescription}"
+					state="{ 
+						path: 'BillingStatus',
+						formatter: '.formatter.getBillingStatus' 
+					}"
+				/>
+				<ObjectStatus
+					title="{i18n>delivertStatus}"
+					text="{DeliveryStatusDescription}"
+					state="{ 
+						path: 'DeliveryStatus',
+						formatter: '.formatter.getDeliveryStatus' 
+					}"
+				/>
+			</statuses>
+		</ObjectHeader>
+		
+		<fb:FilterBar clear="onClear" search="onSearch" showClearButton="true" showClearOnFB="true">
+			<fb:filterGroupItems>
+				<fb:FilterGroupItem visibleInFilterBar="true" groupName="ProductInfo" groupTitle="{i18n>filterProductInfo}" name="ProductID" label="{i18n>productID}">
+					<fb:control>
+						<Input value="{filters>/productId}" />
+					</fb:control>				
+				</fb:FilterGroupItem>
+			</fb:filterGroupItems>			
+		</fb:FilterBar>
+		
+		<Table
+			id="tableSalesOrderItem"
+			width="auto"
+			mode="Delete"
+			delete="onDeleteItem"
+			items="{
+				path: 'ToLineItems',
+				parameters: {
+					expand: 'ToProduct'
+				},
+				sorter: {
+					path: 'ItemPosition',
+					descending: true
+				}
+			}"
+			growing="true"
+			growingScrollToLoad="true">
+			<headerToolbar>
+				<Toolbar>
+					<content>
+						<Title text="{i18n>saleOrderItem}" level="H2"/>
+						<ToolbarSpacer />
+						<Button tooltip="{i18n>viewSettingsDialog}" icon="sap-icon://drop-down-list" press="handleViewSettingsDialogButtonOpen" />
+					</content>
+				</Toolbar>
+			</headerToolbar>
+			<columns >
+				<Column>
+					<Text text="{i18n>product}" />
+				</Column>
+				<Column
+					demandPopin="true"
+					minScreenWidth="Desktop">
+					<Text text="{i18n>productCategory}" />
+				</Column>
+				<Column
+					demandPopin="true"
+					minScreenWidth="Tablet">
+					<Text text="{i18n>productQuantity}" />
+				</Column>
+				<Column
+					demandPopin="true"
+					minScreenWidth="Tablet">
+					<Text text="{i18n>grossAmount}" />
+				</Column>
+				<Column
+					demandPopin="true"
+					minScreenWidth="Tablet">
+					<Text text="{i18n>deliveryDate}" />
+				</Column>
+				
+			</columns>
+			<items>
+				<ColumnListItem>
+					<cells>
+						<ObjectIdentifier
+							title="{ToProduct/Name}"
+							text="{ProductID}"
+						/>
+							
+						<Text
+							text="{ToProduct/Category}" 
+						/>
+							
+						<Text
+							text="{Quantity} x {QuantityUnit}" 
+						/>
+							
+						<ObjectNumber
+							number="{
+								parts:[{path:'GrossAmount'}, {path:'CurrencyCode'}],
+								type: 'sap.ui.model.type.Currency',
+								formatOptions: {showMeasure: false}
+							}"
+							unit="{CurrencyCode}" />
+						
+						<Text
+							text="{
+								path: 'DeliveryDate',
+								type: 'sap.ui.model.type.DateTime',
+								formatOptions: {
+									style: 'medium'
+								}
+							}" />
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+	</Page>
+</mvc:View>

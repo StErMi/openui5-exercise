@@ -91,6 +91,7 @@
 					descending: true
 				}
 			}"
+			itemPress="onItemPress"
 			growing="true"
 			growingScrollToLoad="true">
 			<headerToolbar>
@@ -143,7 +144,8 @@
 				</Column>
 			</columns>
 			<items>
-				<ColumnListItem>
+				<ColumnListItem
+						type="Navigation">
 					<cells>
 						<ObjectIdentifier
 							title="{SalesOrderID}"

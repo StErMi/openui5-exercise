@@ -6,11 +6,13 @@ sap.ui.define([
 	"sap/ui/core/format/DateFormat",
 	"sap/ui/Device",
     "com/techedge/training/SAPUI5Training/model/Formatter",
+	"sap/m/MessageBox",
+    "sap/ui/core/routing/History",
     "sap/ui/core/UIComponent"
-], function (Controller, Filter, FilterOperator, Sorter, DateFormat, Device, Formatter, UIComponent) {
+], function (Controller, Filter, FilterOperator, Sorter, DateFormat, Device, Formatter, MessageBox, History, UIComponent) {
 	"use strict";
 
-	return Controller.extend("com.techedge.training.SAPUI5Training.controller.BusinessPartnerDetail", {
+	return Controller.extend("com.techedge.training.SAPUI5Training.controller.BusinessPartnerSalesDetail", {
 		
 		/////////////////////////////////////////////////////////
 		// VARIABLES
@@ -18,6 +20,7 @@ sap.ui.define([
 		
 		formatter: Formatter,
 		_businessPartnerID: null,
+		_salesOrderID: null,
 		_oDialog: null,
 		_dateFormat: DateFormat.getDateInstance({pattern : "dd/MM/YYYY hh:mm" }),
 		
@@ -26,27 +29,16 @@ sap.ui.define([
 		/////////////////////////////////////////////////////////
 		
 		onInit: function () {
-			var oRouter = UIComponent.getRouterFor(this);
-			oRouter.getRoute("TargetBusinessPartnerDetail").attachMatched(this.__onRouteMatched, this);
-			
-			var oController = this;
-			this.mGroupFunctions = {
-				CreatedAt: function(oContext) {
-					var dCreatedAt = oContext.getProperty("CreatedAt");
-					var sDateFormatted = oController._dateFormat.format(dCreatedAt);
-					return {
-						key: sDateFormatted,
-						text: sDateFormatted
-					};
-				}
-			};
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.getRoute("TargetBusinessPartnerSalesOrderDetail").attachMatched(this.__onRouteMatched, this);
 		},
 		
 		__onRouteMatched: function(oEvent) {
 			var that = this;
 			this._businessPartnerID = oEvent.getParameter("arguments").BusinessPartnerID;
+			this._salesOrderID = oEvent.getParameter("arguments").SalesOrderID;
 			this.getView().bindElement({
-				path: "/BusinessPartnerSet('" + this._businessPartnerID + "')",
+				path: "/BusinessPartnerSet('" + this._businessPartnerID + "')/ToSalesOrders('" + this._salesOrderID + "')",
 				events : {
 					dataRequested: function () {
 						that.getView().setBusy(true);
@@ -65,9 +57,43 @@ sap.ui.define([
 		// EVENTS
 		/////////////////////////////////////////////////////////
 		
+		onNavButtonPress: function(oEvent) {
+			var oHistory = History.getInstance();
+    		var sPreviousHash = oHistory.getPreviousHash();
+			if (sPreviousHash !== undefined) {
+				oHistory.go(-1);
+			} else {
+				this.getOwnerComponent().getRouter().navTo("TargetBusinessPartnerList", {}, true);
+			}
+		},
+		
+		onDeleteItem: function(oEvent) {
+			var controller = this;
+			var oModel = this.getView().getModel();
+			var sPath = oEvent.getParameter("listItem").getBindingContextPath();
+			var oResourceBundle = this.getView().getModel("i18n").getResourceBundle();
+			var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
+			
+			controller.byId("tableSalesOrderItem").setBusy(true);
+			oModel.remove(sPath, {
+				success: function() {
+					MessageBox.success( oResourceBundle.getText("deleteSaleItemSuccess"), {
+						styleClass: bCompact ? "sapUiSizeCompact" : ""
+					});
+					controller.byId("tableSalesOrderItem").setBusy(false);
+				},
+				error: function() {
+					MessageBox.error( oResourceBundle.getText("deleteSaleItemError"), {
+						styleClass: bCompact ? "sapUiSizeCompact" : ""
+					});
+					controller.byId("tableSalesOrderItem").setBusy(false);
+				}
+			});
+		},
+		
 		handleViewSettingsDialogButtonOpen: function(oEvent) {
 			if (!this._oDialog) {
-				this._oDialog = sap.ui.xmlfragment("com.techedge.training.SAPUI5Training.view.fragment.dialog.SaleOrderViewSettingDialog", this);
+				this._oDialog = sap.ui.xmlfragment("com.techedge.training.SAPUI5Training.view.fragment.dialog.SaleOrderItemViewSettingDialog", this);
 				this.getView().addDependent(this._oDialog);
 			}
 			// toggle compact style
@@ -76,7 +102,7 @@ sap.ui.define([
 		},
 		
 		handleViewSettingsDialogButtonConfirm: function(oEvent) {
-			var oTable = this.byId("tableSalesOrder");
+			var oTable = this.byId("tableSalesOrderItem");
 
 			var mParams = oEvent.getParameters();
 			var oBinding = oTable.getBinding("items");
@@ -85,15 +111,13 @@ sap.ui.define([
 			// (grouping comes before sorting)
 			var sPath;
 			var bDescending;
-			var vGroup;
 			var aSorters = [];
 			
 			// Gather grouping info
 			if (mParams.groupItem) {
 				sPath = mParams.groupItem.getKey();
 				bDescending = mParams.groupDescending;
-				vGroup = this.mGroupFunctions[sPath];
-				aSorters.push(new Sorter(sPath, bDescending, vGroup === undefined ? true : vGroup));
+				aSorters.push(new Sorter(sPath, bDescending, true));
 			}
 			
 			// Gather sorting info
@@ -103,20 +127,6 @@ sap.ui.define([
 			oBinding.sort(aSorters);
 		},
 		
-		onItemPress: function(oEvent) {
-			var oItem = oEvent.getParameter("listItem");
-			
-			var sSalesOrderID = oItem.getBindingContext().getProperty("SalesOrderID");
-			
-			this.getOwnerComponent().getRouter().navTo("TargetBusinessPartnerSalesOrderDetail", 
-				{
-					BusinessPartnerID: this._businessPartnerID,
-					SalesOrderID: sSalesOrderID
-				}, 
-				!Device.system.phone
-			);
-		},
-		
 		/////////////////////////////////////////////////////////
 		// FILTERBAR EVENTS
 		/////////////////////////////////////////////////////////
@@ -124,29 +134,14 @@ sap.ui.define([
 		onSearch: function(oEvent) {
 			var oFilterModel = this.getView().getModel("filters");
 			
-			var sOrderId = oFilterModel.getProperty("/orderId");
-			var sLifecycleStatus = oFilterModel.getProperty("/lifecycleStatus");
-			var sBillingStatus = oFilterModel.getProperty("/billingStatus");
-			var sDeliveryStatus = oFilterModel.getProperty("/deliveryStatus");
+			var sProductId = oFilterModel.getProperty("/productId");
 			var aFilters = [];
 			
-			if( sOrderId ) {
-				aFilters.push( new Filter("SalesOrderID", FilterOperator.Contains, sOrderId) );
+			if( sProductId ) {
+				aFilters.push( new Filter("ProductID", FilterOperator.Contains, sProductId) );
 			}
 			
-			if( sLifecycleStatus ) {
-				aFilters.push( new Filter("LifecycleStatus", FilterOperator.EQ, sLifecycleStatus) );
-			}
-			
-			if( sBillingStatus ) {
-				aFilters.push( new Filter("BillingStatus", FilterOperator.EQ, sBillingStatus) );
-			}
-			
-			if( sDeliveryStatus ) {
-				aFilters.push( new Filter("DeliveryStatus", FilterOperator.EQ, sDeliveryStatus) );
-			}
-			
-			this.byId("tableSalesOrder").getBinding("items").filter(aFilters);
+			this.byId("tableSalesOrderItem").getBinding("items").filter(aFilters);
 		},
 		
 		onClear: function(oEvent) {
