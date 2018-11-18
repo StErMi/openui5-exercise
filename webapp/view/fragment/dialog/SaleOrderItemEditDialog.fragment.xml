@@ -4,7 +4,7 @@
 	xmlns:f="sap.ui.layout.form"
 	xmlns:core="sap.ui.core">
 	<Dialog
-      title="Test">
+      title="{i18n>saleOrderItemEditDialogTitle}">
 		<VBox class="sapUiSmallMargin">
 			<f:SimpleForm
 				editable="true"
@@ -32,7 +32,7 @@
 					<Input editable="false" value="{ItemPosition}" />
 					<Label text="{i18n>saleOrderItemFormProductID}" />
 					<Input editable="false" value="{ProductID}" />
-					<Label text="{i18n>saleOrderItemFormNote}" />
+					<Label required="true" text="{i18n>saleOrderItemFormNote}" />
 					<Input editable="true" value="{Note}" liveChange="validateNote" />
 					<Label text="{i18n>saleOrderItemFormNoteLanguage}" />
 					<Input editable ="false" value="{NoteLanguage}" />
