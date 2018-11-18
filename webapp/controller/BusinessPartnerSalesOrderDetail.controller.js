@@ -8,8 +8,9 @@ sap.ui.define([
     "com/techedge/training/SAPUI5Training/model/Formatter",
 	"sap/m/MessageBox",
     "sap/ui/core/routing/History",
-    "sap/ui/core/UIComponent"
-], function (Controller, Filter, FilterOperator, Sorter, DateFormat, Device, Formatter, MessageBox, History, UIComponent) {
+    "sap/ui/core/UIComponent",
+    "sap/ui/core/ValueState"
+], function (Controller, Filter, FilterOperator, Sorter, DateFormat, Device, Formatter, MessageBox, History, UIComponent, ValueState) {
 	"use strict";
 
 	return Controller.extend("com.techedge.training.SAPUI5Training.controller.BusinessPartnerSalesDetail", {
@@ -22,6 +23,7 @@ sap.ui.define([
 		_businessPartnerID: null,
 		_salesOrderID: null,
 		_oDialog: null,
+		_oEditDialog: null,
 		_dateFormat: DateFormat.getDateInstance({pattern : "dd/MM/YYYY hh:mm" }),
 		
 		/////////////////////////////////////////////////////////
@@ -56,6 +58,69 @@ sap.ui.define([
 		/////////////////////////////////////////////////////////
 		// EVENTS
 		/////////////////////////////////////////////////////////
+		
+		validateNote: function(oEvent) {
+			var oResourceBundle = this.getView().getModel("i18n").getResourceBundle();
+			var sValue = oEvent.getParameter("value");
+			var oSource = oEvent.getSource();
+			if( sValue && sValue.trim().length > 0 ) {
+				oSource.setValueState(ValueState.Success);
+				oSource.setValueStateText(null);
+			} else {
+				oSource.setValueState(ValueState.Error);
+				oSource.setValueStateText(oResourceBundle.getText("errorEmptyNote"));
+			}
+		},
+		
+		onSalesOrderItemDialogClose: function(oEvent) {
+			this.getView().getModel().resetChanges();
+			this._oEditDialog.close();
+		},
+		
+		onSalesOrderItemDialogSave: function(oEvent) {
+			var controller = this;
+			var oResourceBundle = this.getView().getModel("i18n").getResourceBundle();
+			var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
+			
+			var oModel = this.getView().getModel();
+			if( oModel.hasPendingChanges() ) {
+				controller._oEditDialog.setBusy(true);
+				oModel.submitChanges({
+					success: function(oData) {
+						MessageBox.success( oResourceBundle.getText("saveSaleItemSuccess"), {
+							styleClass: bCompact ? "sapUiSizeCompact" : ""
+						});
+						controller._oEditDialog.setBusy(false);
+						controller._oEditDialog.close();
+					},
+					error: function(oError) {
+						MessageBox.error( oResourceBundle.getText("saveSaleItemError"), {
+							styleClass: bCompact ? "sapUiSizeCompact" : ""
+						});
+						controller._oEditDialog.setBusy(false);
+						controller._oEditDialog.close();
+					}
+				});
+			} else {
+				MessageBox.success( oResourceBundle.getText("saveSaleItemNoChanges"), {
+					styleClass: bCompact ? "sapUiSizeCompact" : ""
+				});
+				controller._oEditDialog.close();
+			}
+		},
+		
+		onTitlePress: function(oEvent) {
+			var oItem = oEvent.getSource().getParent();
+			
+			if (!this._oEditDialog) {
+				this._oEditDialog = sap.ui.xmlfragment("com.techedge.training.SAPUI5Training.view.fragment.dialog.SaleOrderItemEditDialog", this);
+				this.getView().addDependent(this._oEditDialog);
+			}
+			this._oEditDialog.bindElement( oItem.getBindingContextPath() );
+			// toggle compact style
+			jQuery.sap.syncStyleClass("sapUiSizeCompact", this.getView(), this._oEditDialog);
+			this._oEditDialog.open();
+		},
 		
 		onNavButtonPress: function(oEvent) {
 			var oHistory = History.getInstance();

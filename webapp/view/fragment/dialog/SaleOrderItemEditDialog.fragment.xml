@@ -1,0 +1,72 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core">
+	<Dialog
+      title="Test">
+		<VBox class="sapUiSmallMargin">
+			<f:SimpleForm
+				editable="true"
+				layout="ResponsiveGridLayout"
+				title=""
+				labelSpanXL="4"
+				labelSpanL="3"
+				labelSpanM="4"
+				labelSpanS="12"
+				adjustLabelSpan="false"
+				emptySpanXL="0"
+				emptySpanL="4"
+				emptySpanM="0"
+				emptySpanS="0"
+				columnsXL="2"
+				columnsL="1"
+				columnsM="1"
+				singleContainerFullSize="false">
+				<f:content>
+					<core:Title text="{i18n>saleOrderItemFormTitleOrderInfo}" />
+					
+					<Label text="{i18n>saleOrderItemFormSalesOrderID}" />
+					<Input editable="false" value="{SalesOrderID}" />
+					<Label text="{i18n>saleOrderItemFormItemPosition}" />
+					<Input editable="false" value="{ItemPosition}" />
+					<Label text="{i18n>saleOrderItemFormProductID}" />
+					<Input editable="false" value="{ProductID}" />
+					<Label text="{i18n>saleOrderItemFormNote}" />
+					<Input editable="true" value="{Note}" liveChange="validateNote" />
+					<Label text="{i18n>saleOrderItemFormNoteLanguage}" />
+					<Input editable ="false" value="{NoteLanguage}" />
+					<Label text="{i18n>saleOrderItemFormDeliveryDate}" />
+					<Input editable="false" 
+						value="{
+							path: 'DeliveryDate',
+							type: 'sap.ui.model.type.DateTime',
+							formatOptions: {
+								style: 'medium'
+							}
+						}" 
+					/>
+					
+					<core:Title text="{i18n>saleOrderItemFormTitleOrderPrice}" />
+					<Label text="{i18n>saleOrderItemFormCurrencyCode}" />
+					<Input editable="false" value="{CurrencyCode}" />
+					<Label text="{i18n>saleOrderItemFormGrossAmount}" />
+					<Input editable="false" value="{GrossAmount}" />
+					<Label text="{i18n>saleOrderItemFormNetAmount}" />
+					<Input editable="false" value="{NetAmount}" />
+					<Label text="{i18n>saleOrderItemFormTaxAmount}" />
+					<Input editable="false" value="{TaxAmount}" />
+					<Label text="{i18n>saleOrderItemFormQuantity}" />
+					<Input editable="false" value="{Quantity}" />
+					<Label text="{i18n>saleOrderItemFormQuantityUnit}" />
+					<Input editable="false" value="{QuantityUnit}" />
+				</f:content>
+			</f:SimpleForm>
+		</VBox>
+		<buttons>
+	        <Button text="{i18n>saleOrderItemFormCancel}" press="onSalesOrderItemDialogClose"/>
+	        <Button text="{i18n>saleOrderItemFormSave}" press="onSalesOrderItemDialogSave" enabled="{= ${Note}.length !== 0 }" />
+	    </buttons>
+    </Dialog>
+	
+</core:FragmentDefinition>

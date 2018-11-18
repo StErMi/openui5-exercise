@@ -115,6 +115,11 @@
 				<Column
 					demandPopin="true"
 					minScreenWidth="Desktop">
+					<Text text="{i18n>note}" />
+				</Column>
+				<Column
+					demandPopin="true"
+					minScreenWidth="Desktop">
 					<Text text="{i18n>productCategory}" />
 				</Column>
 				<Column
@@ -140,6 +145,12 @@
 						<ObjectIdentifier
 							title="{ToProduct/Name}"
 							text="{ProductID}"
+							titleActive="true"
+							titlePress="onTitlePress"
+						/>
+						
+						<Text
+							text="{Note}" 
 						/>
 							
 						<Text
