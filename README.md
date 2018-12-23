@@ -1,4 +1,5 @@
 
+
 # OpenUI5 Training
 This repo will contain a step-by-step training course that I've created for new OpenUI5 developers that are joining our [Techedge Group](http://www.techedgegroup.com) office in Lucca (Italy).
 
@@ -126,3 +127,31 @@ The most important part of this exercise is to understand how to Delete (part of
 This is our main task in this exercise but it’s not the only thing we’ve done in the code
 
 ### [Blog Post about Step 4 (everything you need to know)](https://medium.com/@stermi/sapui5-for-dummies-part-4-a-complete-step-by-step-exercise-a61d0c162300)
+
+##  Step 5
+
+
+### What will be covered on this exercise
+
+
+With Part 5 of this series of blog posts, we will learn how to create a SimpleForm within a Dialog that will allow us to update the information of a Sales Order Item.
+
+Before updating the database order we have to check that everything typed by the user validates our constraints.
+
+-   [ODataModel](https://sapui5.hana.ondemand.com/#/api/sap.ui.model.odata.v2.ODataModel): we have already used it to display server-side information about our Business Partner, Sales Order, and Sales Order Items. We’ve also used it to delete a database record. We’re now going to use it to update a record thanks to the  [submitChanges](https://sapui5.hana.ondemand.com/#/api/sap.ui.model.odata.v2.ODataModel/methods/submitChanges)  method or remove what we’ve done with the  [resetChanges](https://sapui5.hana.ondemand.com/#/api/sap.ui.model.odata.v2.ODataModel/methods/resetChanges)  method.
+-   [Expression Binding](https://help.sap.com/doc/saphelp_uiaddon10/1.17/en-US/da/f6852a04b44d118963968a1239d2c0/content.htm?no_cache=true): an enhancement of the SAPUI5 binding syntax, which allows for providing expressions instead of custom formatter functions
+-   [SimpleForm](https://sapui5.hana.ondemand.com/#/api/sap.ui.layout.form.SimpleForm): a layout that allows users to create a pixel-perfect form
+
+So our main task here is to allows the user to edit a Sales Order Item and submit those changes (if made) to the backend system.
+
+Here’s a list of the things you have to do to get to the final result:
+
+-   Add a new column to the table to display the Note value (that’s the field we’re going to update)
+-   Make the Product Name active (_titleActive=”true”_) and handle the titlePress event
+-   Create a Fragment with inside a  _Dialog_  that contains our  _SimpleForm_
+-   The SimpleForm will contain a  _Label_/Input couple for each of our Sales Order Item fields
+-   All the Input fields won’t be editable except for the Note one
+-   Make the Save button of the dialog enabled only if the Note typed by the user has a length greater than zero
+-   Handle the save button submitting all the user changes!
+
+### [Blog Post about Step 5 (everything you need to know)](https://medium.com/@stermi/sapui5-for-dummies-part-5-a-complete-step-by-step-exercise-dcf5f5ae4ca9)
