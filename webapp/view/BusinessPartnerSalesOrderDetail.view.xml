@@ -105,6 +105,7 @@
 						<Title text="{i18n>saleOrderItem}" level="H2"/>
 						<ToolbarSpacer />
 						<Button tooltip="{i18n>viewSettingsDialog}" icon="sap-icon://drop-down-list" press="handleViewSettingsDialogButtonOpen" />
+						<Button tooltip="{i18n>addSalesOrderItem}" icon="sap-icon://add" press="onAddSalesOrderItem" />
 					</content>
 				</Toolbar>
 			</headerToolbar>
