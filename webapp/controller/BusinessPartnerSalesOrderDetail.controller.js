@@ -168,6 +168,10 @@ sap.ui.define([
 		},
 		
 		onSalesOrderItemDialogClose: function(oEvent) {
+			if( this.oNewItemContext ) {
+				this.getView().getModel().deleteCreatedEntry(this.oNewItemContext);
+				this.oNewItemContext = null;
+			}
 			this.getView().getModel().resetChanges();
 			this._oEditDialog.close();
 		},
@@ -214,6 +218,7 @@ sap.ui.define([
 							});
 						}
 						
+						controller.oNewItemContext = null;
 						oModel.setUseBatch(true);
 					},
 					error: function(oError) {
